@@ -10,7 +10,7 @@
 
 	<!-- References -->
 	<ItemGroup>
-		
+	  <None Remove="changelog.txt" />
 	</ItemGroup>
 
 </Project>

@@ -36,7 +36,7 @@ public class OpacityController : Mod
             return;
         }
 
-        if (!HideFriendly && ((OnlyMyPlayer && Main.myPlayer != proj.owner) || (!OnlyMyPlayer && proj.owner == Main.myPlayer)))
+        if (!HideFriendly && (OnlyMyPlayer && Main.myPlayer != proj.owner || !OnlyMyPlayer && proj.owner == Main.myPlayer))
         {
             return;
         }
