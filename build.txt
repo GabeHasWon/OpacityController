@@ -1,0 +1,3 @@
+displayName = Opacity Controller
+author = GabeHasWon
+version = 1.0.0

@@ -1,0 +1,10 @@
+--- Opacity Controller ---
+commissioned by Queen Snek
+developed by GabeHasWon
+
+A simple client-side mod that allows you to control the opacity of all projectiles.
+A lot of mods enjoy spamming as many projectiles on screen as possible, so using this allows you to reduce noise on screen.
+Supports modifying your own projectiles, other player's projectiles, and enemy projectiles.
+
+Do note: Not all projectiles will be modified perfectly, but this will get most projectiles.
+Some projectiles, especially fancier modded ones, will ignore this entirely. There's not much to be done about it.

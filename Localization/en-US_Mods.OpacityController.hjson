@@ -1,0 +1,20 @@
+Configs: {
+	OpacityConfig: {
+		DisplayName: Opacity Config
+
+		SelfOpacity: {
+			Label: Own Projectile Opacity
+			Tooltip: Controls the opacity of your own projectiles.
+		}
+
+		FriendlyOpacity: {
+			Label: Friendly Projectile Opacity
+			Tooltip: Controls the opacity of your fellow player's projectiles.
+		}
+
+		NPCOpacity: {
+			Label: Enemy Projectile Opacity
+			Tooltip: Controls the opacity of enemy projectiles.
+		}
+	}
+}
