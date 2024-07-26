@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace OpacityController;
 
@@ -10,7 +11,9 @@ public class OpacityController : Mod
 {
     internal static bool HideFriendly = false;
     internal static bool OnlyMyPlayer = false;
+    internal static bool DrawOnlyUndrawn = false;
 
+    private static readonly HashSet<int> drawnProjectiles = [];
     private static PropertyInfo rtUsagePropertyInfo = null;
 
     public RenderTarget2D projTarget;
@@ -31,6 +34,13 @@ public class OpacityController : Mod
 
     private void HideUnwantedProjectiles(On_Main.orig_DrawProj_Inner orig, Main self, Projectile proj)
     {
+        if (DrawOnlyUndrawn && !drawnProjectiles.Contains(proj.whoAmI))
+        {
+            drawnProjectiles.Add(proj.whoAmI);
+            orig(self, proj);
+            return;
+        }
+
         if (HideFriendly && proj.friendly && !proj.hostile)
         {
             return;
@@ -44,6 +54,7 @@ public class OpacityController : Mod
         if (!HideFriendly && proj.hostile)
             return;
 
+        drawnProjectiles.Add(proj.whoAmI);
         orig(self, proj);
     }
 
@@ -51,12 +62,34 @@ public class OpacityController : Mod
 
     private void TargetProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
     {
+        drawnProjectiles.Clear();
+
         rtUsagePropertyInfo.SetValue(Main.screenTarget, RenderTargetUsage.PreserveContents);
         DrawFriendly(orig, self, true);
         DrawFriendly(orig, self, false);
         DrawHostile(orig, self);
+        DrawAllRemainingProjectiles(orig, self);
 
-        rtUsagePropertyInfo.SetValue(Main.screenTarget, RenderTargetUsage.PreserveContents);
+        rtUsagePropertyInfo.SetValue(Main.screenTarget, RenderTargetUsage.DiscardContents);
+    }
+
+    private void DrawAllRemainingProjectiles(On_Main.orig_DrawProjectiles orig, Main self)
+    {
+        var bindings = Main.graphics.GraphicsDevice.GetRenderTargets();
+        Main.graphics.GraphicsDevice.SetRenderTarget(projTarget);
+        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+
+        DrawOnlyUndrawn = true;
+        orig(self);
+        DrawOnlyUndrawn = false;
+
+        Main.graphics.GraphicsDevice.SetRenderTargets(bindings);
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
+
+        float otherOpacity = ModContent.GetInstance<OpacityConfig>().OtherOpacity;
+        Main.spriteBatch.Draw(projTarget, Vector2.Zero, null, Color.White * otherOpacity, 0f, Vector2.Zero, 1, SpriteEffects.None, 0);
+
+        Main.spriteBatch.End();
     }
 
     private void DrawHostile(On_Main.orig_DrawProjectiles orig, Main self)
@@ -92,7 +125,7 @@ public class OpacityController : Mod
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null);
 
         var config = ModContent.GetInstance<OpacityConfig>();
-        float opacity = !onlyMine ? config.SelfOpacity : config.FriendlyOpacity;
+        float opacity = !onlyMine ? config.OtherFriendlyOpacity : config.SelfOpacity;
         Main.spriteBatch.Draw(projTarget, Vector2.Zero, null, Color.White * opacity, 0f, Vector2.Zero, 1, SpriteEffects.None, 0);
 
         Main.spriteBatch.End();

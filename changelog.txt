@@ -1,2 +1,5 @@
 v1.0.0.1
-- Made ModSide Client-only
+- Fixed render target usage for Main.screenTarget being kept as PreserveContents despite vanilla defaulting to DiscardContents
+- Added Other Opacity config
+- Added rendering for projectiles that did not fall into the friendly, own, or hostile categories
+- Switched around Self and Friendly configs to fit their actual function
