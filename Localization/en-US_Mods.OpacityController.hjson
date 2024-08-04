@@ -21,5 +21,15 @@ Configs: {
 			Label: Other Opacity
 			Tooltip: Controls the opacity of all projectiles that do not fall under any of the above categories.
 		}
+
+		IgnoreCached: {
+			Label: Ignore Cached
+			Tooltip:
+				'''
+				Ignores cached projectiles, such as projectiles that are behind tiles.
+				This is only an option if you're getting extreme lag and want to save a little more performance,
+				as cached projectiles are uncommon.
+				'''
+		}
 	}
 }

@@ -23,4 +23,7 @@ internal class OpacityConfig : ModConfig
     [Range(0, 1)]
     [DefaultValue(1)]
     public float OtherOpacity { get; set; }
+
+    [DefaultValue(false)]
+    public bool IgnoreCached { get; set; }
 }

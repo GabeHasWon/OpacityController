@@ -1,5 +1,4 @@
-v1.0.0.1
-- Fixed render target usage for Main.screenTarget being kept as PreserveContents despite vanilla defaulting to DiscardContents
-- Added Other Opacity config
-- Added rendering for projectiles that did not fall into the friendly, own, or hostile categories
-- Switched around Self and Friendly configs to fit their actual function
+v1.0.0.4
+- Fixed cached projectiles not being drawn at all
+- Added option to not use opacity control on cached projectiles in case of performance concerns
+- Made projectiles not drawn in accounted-for opacity-controlled areas draw instead of being hidden by default
